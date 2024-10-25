@@ -1,0 +1,22 @@
+# https://docs.redhat.com/en/documentation/red_hat_satellite/6.3/html/installation_guide/installing_capsule_server
+---
+- name: Register the system with Red Hat Subscription Manager
+  command: >
+    subscription-manager register --username={{ rhn_username }} --password={{ rhn_password }}
+
+- name: Attach the Capsule subscription
+  command: >
+    subscription-manager attach --pool={{ capsule_pool_id }}
+
+- name: Enable Capsule repositories
+  command: >
+    subscription-manager repos --enable=rhel-7-server-rpms --enable=rhel-7-server-satellite-capsule-6.3-rpms
+
+- name: Install Capsule Server package
+  yum:
+    name: "katello"
+    state: present
+
+- name: Configure and setup Capsule
+  shell: |
+    capsule-installer --scenario capsule --foreman-initial-organization "Default_Organization" --foreman-initial-location "Default_Location"

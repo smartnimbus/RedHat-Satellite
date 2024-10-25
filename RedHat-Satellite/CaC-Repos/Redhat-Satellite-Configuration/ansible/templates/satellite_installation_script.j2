@@ -1,0 +1,6 @@
+#!/bin/bash
+subscription-manager register --username={{ rhn_username }} --password={{ rhn_password }}
+subscription-manager attach --pool={{ satellite_pool_id }}
+subscription-manager repos --enable=rhel-7-server-rpms --enable=rhel-7-server-satellite-6.3-rpms
+yum install -y satellite
+satellite-installer --scenario satellite --foreman-initial-organization "Default_Organization" --foreman-initial-location "Default_Location"

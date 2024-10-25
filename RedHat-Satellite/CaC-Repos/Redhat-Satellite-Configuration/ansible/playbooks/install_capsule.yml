@@ -1,0 +1,6 @@
+---
+- name: Install and Configure Red Hat Capsule Server
+  hosts: all
+  become: true
+  roles:
+    - capsule

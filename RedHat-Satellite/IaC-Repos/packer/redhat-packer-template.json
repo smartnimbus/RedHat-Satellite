@@ -1,0 +1,25 @@
+{
+  "builders": [{
+    "type": "amazon-ebs",
+    "region": "us-east-1",
+    "source_ami": "ami-0a887e401f7654935",  // Red Hat base image (update based on region)
+    "instance_type": "t2.micro",
+    "ssh_username": "ec2-user",
+    "ami_name": "Hardened-RHEL-{{timestamp}}",
+    "ami_description": "A hardened Red Hat Enterprise Linux AMI built by Packer",
+    "tags": {
+      "OS_Version": "RedHat",
+      "Environment": "Production"
+    }
+  }],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "scripts/harden.sh"
+    },
+    {
+      "type": "shell",
+      "script": "scripts/install_core_apps.sh"
+    }
+  ]
+}

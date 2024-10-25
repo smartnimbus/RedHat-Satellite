@@ -1,0 +1,5 @@
+https://docs.redhat.com/en/documentation/red_hat_satellite/6.3/html/installation_guide/running_red_hat_satellite_on_amazon_web_services#running_red_hat_satellite_on_amazon_web_services
+
+https://docs.redhat.com/en/documentation/red_hat_satellite/6.3/html/installation_guide/installing_satellite_server#installing_satellite_server_install_guide
+
+https://docs.redhat.com/en/documentation/red_hat_satellite/6.3/html/installation_guide/installing_capsule_server

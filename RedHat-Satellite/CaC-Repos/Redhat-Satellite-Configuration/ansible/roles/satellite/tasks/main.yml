@@ -1,0 +1,38 @@
+# https://docs.redhat.com/en/documentation/red_hat_satellite/6.3/html/installation_guide/installing_satellite_server#installing_satellite_server
+---
+- name: Install AWS CLI and boto3
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - awscli
+    - python3-boto3
+
+- name: Fetch RHN credentials from AWS Secrets Manager
+  shell: |
+    aws secretsmanager get-secret-value --secret-id rhn_secret --query SecretString --output text
+  register: rhn_secret
+
+- set_fact:
+    rhn_credentials: "{{ rhn_secret.stdout | from_json }}"
+
+- name: Register the system with Red Hat Subscription Manager
+  command: >
+    subscription-manager register --username={{ rhn_credentials.username }} --password={{ rhn_credentials.password }}
+
+- name: Attach the Satellite subscription
+  command: >
+    subscription-manager attach --pool={{ rhn_credentials.pool_id }}
+
+- name: Enable Satellite repositories
+  command: >
+    subscription-manager repos --enable=rhel-7-server-rpms --enable=rhel-7-server-satellite-6.3-rpms
+
+- name: Install Satellite Server package
+  yum:
+    name: "satellite"
+    state: present
+
+- name: Configure and setup Satellite
+  shell: |
+    satellite-installer --scenario satellite --foreman-initial-organization "Default_Organization" --foreman-initial-location "Default_Location"
