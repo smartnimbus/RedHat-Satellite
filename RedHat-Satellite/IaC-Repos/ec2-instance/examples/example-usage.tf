@@ -19,7 +19,7 @@ module "ec2_instance" {
 
   tags = tomap({
     "Environment"   = "dev",
-    "Createdby"     = "Vitaliy Natarov",
+    "Createdby"     = "Amit Patel",
     "Orchestration" = "Terraform"
   })
 }

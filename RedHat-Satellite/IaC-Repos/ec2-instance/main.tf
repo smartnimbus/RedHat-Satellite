@@ -4,8 +4,10 @@
 # If it does, the data source will retrieve its properties for later use.
 #---------------------------------------------------
 data "aws_iam_role" "ssm_ec2_role" {
+  # Conditionally create the data source if an IAM role with the specified name exists
   count = length(try([data.aws_iam_role.ssm_ec2_role.instance_name], [])) > 0 ? 1 : 0
-  name  = "${var.instance_name}-ssm-role"
+  # The name of the IAM role to look for
+  name = "${var.instance_name}-ssm-role"
 }
 
 #---------------------------------------------------
@@ -15,9 +17,12 @@ data "aws_iam_role" "ssm_ec2_role" {
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile
 #---------------------------------------------------
 resource "aws_iam_role" "ssm_ec2_role" {
+  # Conditionally create the resource if the data source did not find an existing role
   count = length(data.aws_iam_role.ssm_ec2_role) == 0 ? 1 : 0
-  name  = "${var.instance_name}-ssm-role"
+  # The name of the IAM role
+  name = "${var.instance_name}-ssm-role"
 
+  # The policy that grants an entity permission to assume the role.
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
@@ -37,8 +42,11 @@ resource "aws_iam_role" "ssm_ec2_role" {
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile
 #---------------------------------------------------
 resource "aws_iam_role_policy_attachment" "ssm_policy_attach" {
-  count      = length(data.aws_iam_role.ssm_ec2_role) == 0 ? 1 : 0
-  role       = aws_iam_role.ssm_ec2_role.instance_name
+  # Conditionally create the resource if the IAM role was created in this configuration
+  count = length(data.aws_iam_role.ssm_ec2_role) == 0 ? 1 : 0
+  # The name of the IAM role to attach the policy to
+  role = aws_iam_role.ssm_ec2_role.instance_name
+  # The ARN of the policy to attach
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
@@ -48,7 +56,9 @@ resource "aws_iam_role_policy_attachment" "ssm_policy_attach" {
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile
 #---------------------------------------------------
 resource "aws_iam_instance_profile" "ssm_role_profile" {
+  # The name of the instance profile
   name = "${var.instance_name}-ssm-profile"
+  # The name of the IAM role to associate with the instance profile
   role = coalesce(
     aws_iam_role.ssm_ec2_role[count.index].instance_name,
     data.aws_iam_role.ssm_ec2_role.instance_name
@@ -57,6 +67,7 @@ resource "aws_iam_instance_profile" "ssm_role_profile" {
 
 # Load the default user data script
 data "template_file" "default_userdata" {
+  # The path to the default user data script
   template = file("${path.module}/default_userdata.sh")
 }
 
@@ -71,6 +82,7 @@ data "template_file" "default_userdata" {
 # https://docs.aws.amazon.com/systems-manager/latest/userguide/getting-started-create-iam-instance-profile.html
 #---------------------------------------------------
 resource "aws_instance" "instance" {
+  # Conditionally create the resource based on the 'enable_instance' variable
   count = var.enable_instance ? 1 : 0
 
   # Instance details, such as AMI and instance type
@@ -84,9 +96,10 @@ resource "aws_instance" "instance" {
   tenancy                    = var.instance_tenancy
 
   # EBS optimization and source-destination checks
-  ebs_optimized = var.instance_ebs_optimized
+  ebs_optimized     = var.instance_ebs_optimized
   source_dest_check = var.instance_source_dest_check
   monitoring        = var.instance_monitoring
+
   # Network configuration for VPC and private/public IPs
   subnet_id                   = var.instance_subnet_id
   associate_public_ip_address = var.instance_associate_public_ip_address
@@ -98,7 +111,7 @@ resource "aws_instance" "instance" {
   # Security groups and key pair for SSH access
   vpc_security_group_ids = var.instance_vpc_security_group_ids
   security_groups        = var.instance_security_groups
-  key_name = var.instance_key_name
+  key_name               = var.instance_key_name
 
   # User data configuratio
   # Define combined user data, merging the default script with user-provided script
@@ -126,6 +139,7 @@ resource "aws_instance" "instance" {
 
   host_id = var.instance_host_id
   dynamic "cpu_options" {
+    # If 'instance_cpu_options' is defined, create a 'cpu_options' block
     for_each = length(var.instance_cpu_options) > 0 ? [var.instance_cpu_options] : []
 
     content {
@@ -134,14 +148,14 @@ resource "aws_instance" "instance" {
       amd_sev_snp      = try(cpu_options.value.amd_sev_snp, null)
     }
   }
-  # cpu_core_count       = var.instance_cpu_core_count
-  # cpu_threads_per_core = var.instance_cpu_threads_per_core
 
   hibernation           = var.instance_hibernation
   secondary_private_ips = var.instance_secondary_private_ips
 
+  # Launch template configuration
   dynamic "launch_template" {
     iterator = launch_template
+    # If 'instance_launch_template' is defined, create a 'launch_template' block
     for_each = length(keys(var.instance_launch_template)) > 0 ? [var.instance_launch_template] : []
 
     content {
@@ -151,15 +165,19 @@ resource "aws_instance" "instance" {
     }
   }
 
+  # Capacity reservation configuration
   dynamic "capacity_reservation_specification" {
     iterator = capacity_reservation_specification
+    # Iterate over the 'instance_capacity_reservation_specification' variable
     for_each = var.instance_capacity_reservation_specification
 
     content {
       capacity_reservation_preference = lookup(capacity_reservation_specification.value, "capacity_reservation_preference", null)
 
+      # Nested dynamic block for capacity reservation target
       dynamic "capacity_reservation_target" {
         iterator = capacity_reservation_target
+        # If 'capacity_reservation_target' is defined within the current capacity reservation specification, create a 'capacity_reservation_target' block
         for_each = length(keys(lookup(capacity_reservation_specification.value, "capacity_reservation_target", {}))) > 0 ? [lookup(capacity_reservation_specification.value, "capacity_reservation_target", {})] : []
 
         content {
@@ -169,8 +187,10 @@ resource "aws_instance" "instance" {
     }
   }
 
+  # Credit specification configuration
   dynamic "credit_specification" {
     iterator = credit_specification
+    # Iterate over the 'instance_credit_specification' variable
     for_each = var.instance_credit_specification
 
     content {
@@ -178,8 +198,10 @@ resource "aws_instance" "instance" {
     }
   }
 
+  # Enclave options configuration
   dynamic "enclave_options" {
     iterator = enclave_options
+    # If 'instance_enclave_options' is defined, create an 'enclave_options' block
     for_each = length(keys(var.instance_enclave_options)) > 0 ? [var.instance_enclave_options] : []
 
     content {
@@ -187,8 +209,10 @@ resource "aws_instance" "instance" {
     }
   }
 
+  # Metadata options configuration
   dynamic "metadata_options" {
     iterator = metadata_options
+    # If 'instance_metadata_options' is defined, create a 'metadata_options' block
     for_each = length(keys(var.instance_metadata_options)) > 0 ? [var.instance_metadata_options] : []
 
     content {
@@ -198,8 +222,10 @@ resource "aws_instance" "instance" {
     }
   }
 
+  # EBS block device configuration
   dynamic "ebs_block_device" {
     iterator = ebs_block_device
+    # Iterate over the 'instance_ebs_block_device' variable
     for_each = var.instance_ebs_block_device
 
     content {
@@ -217,8 +243,10 @@ resource "aws_instance" "instance" {
     }
   }
 
+  # Ephemeral block device configuration
   dynamic "ephemeral_block_device" {
     iterator = ephemeral_block_device
+    # Iterate over the 'instance_ephemeral_block_device' variable
     for_each = var.instance_ephemeral_block_device
 
     content {
@@ -227,9 +255,11 @@ resource "aws_instance" "instance" {
       no_device    = lookup(root_block_device.value, "no_device", null)
     }
   }
+
   # Block device mappings for root and additional volumes
   dynamic "root_block_device" {
     iterator = root_block_device
+    # Iterate over the 'instance_root_block_device' variable
     for_each = var.instance_root_block_device
 
     content {
@@ -246,8 +276,10 @@ resource "aws_instance" "instance" {
     }
   }
 
+  # Network interface configuration
   dynamic "network_interface" {
     iterator = network_interface
+    # Iterate over the 'instance_network_interface' variable
     for_each = var.instance_network_interface
 
     content {
@@ -257,6 +289,7 @@ resource "aws_instance" "instance" {
       delete_on_termination = lookup(network_interface.value, "delete_on_termination", null)
     }
   }
+
   # Tags for the instance and volumes
   volume_tags = merge(
     {
@@ -265,6 +298,7 @@ resource "aws_instance" "instance" {
     var.instance_volume_tags
   )
 
+  # Dynamic block for timeouts configuration
   dynamic "timeouts" {
     iterator = timeouts
     for_each = length(keys(var.instance_timeouts)) > 0 ? [var.instance_timeouts] : []
@@ -276,6 +310,7 @@ resource "aws_instance" "instance" {
     }
   }
 
+  # Tags for the instanc
   tags = merge(
     {
       Name          = var.instance_name
@@ -290,7 +325,7 @@ resource "aws_instance" "instance" {
     create_before_destroy = true
     ignore_changes        = []
   }
-  
+
   # Dependencies and relationships with other resources
   depends_on = []
 }
