@@ -231,7 +231,8 @@ resource "aws_instance" "instance" {
     content {
       delete_on_termination = lookup(ebs_block_device.value, "delete_on_termination", null)
       device_name           = lookup(ebs_block_device.value, "device_name", null)
-      encrypted             = lookup(ebs_block_device.value, "encrypted", null)
+      encrypted             = true  # Enforce encryption
+      # encrypted             = lookup(ebs_block_device.value, "encrypted", null)
       iops                  = lookup(ebs_block_device.value, "iops", null)
       snapshot_id           = lookup(ebs_block_device.value, "snapshot_id", null)
       volume_size           = lookup(ebs_block_device.value, "volume_size", null)
@@ -267,7 +268,8 @@ resource "aws_instance" "instance" {
       iops                  = lookup(root_block_device.value, "iops", null)
       volume_size           = lookup(root_block_device.value, "volume_size", null)
       volume_type           = lookup(root_block_device.value, "volume_type", null)
-      encrypted             = lookup(root_block_device.value, "encrypted", null)
+      # encrypted             = lookup(root_block_device.value, "encrypted", null)
+      encrypted             = true  # Enforce encryption
 
       kms_key_id = lookup(root_block_device.value, "kms_key_id", null)
       throughput = lookup(root_block_device.value, "throughput", null)

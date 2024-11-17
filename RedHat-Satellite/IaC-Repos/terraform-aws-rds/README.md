@@ -438,35 +438,35 @@ The module outputs various attributes of the created resources, such as:
 ----------------------
 | Output                     | Description                                                                 |
 |----------------------------|-----------------------------------------------------------------------------|
-| `rds_cluster_reader_endpoint` | A read-only endpoint for the Aurora cluster, automatically load-balanced across replicas
-| `rds_cluster_endpoint` | The DNS address of the RDS instance
-| `rds_cluster_arn` | Amazon Resource Name (ARN) of cluster
-| `rds_cluster_id` | The RDS Cluster Identifier
-| `rds_global_cluster_arn` | RDS Global Cluster Amazon Resource Name (ARN)
-| `rds_global_cluster_global_cluster_resource_id` | AWS Region-unique, immutable identifier for the global database cluster. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the DB cluster is accessed
-| `rds_global_cluster_id` | RDS Global Cluster identifier
-| `rds_cluster_endpoint_arn` | Amazon Resource Name (ARN) of cluster
-| `rds_cluster_endpoint_id` | The RDS Cluster Endpoint Identifier
-| `rds_cluster_endpoint_endpoint` | A custom endpoint for the Aurora cluster
-| `rds_cluster_parameter_group_arn` | The ARN of the db cluster parameter group.
-| `rds_cluster_parameter_group_id` | The db cluster parameter group name.
-| `db_instance_id` | ""
-| `db_instance_arn` | ""
-| `db_instance_addresses` | ""
-| `db_instance_hosted_zone_id` | Get DB instance hosted zone ID
-| `db_instance_endpoint` | Get DB instance hosted zone ID
-| `aws_db_subnet_group_id` | Get DB subnet group ID
-| `db_parameter_group_id` | Get DB parameter group ID
-| `db_cluster_snapshot_id` | Get DB cluster snapshot ID
-| `db_event_subscription_id` | The name of the RDS event notification subscription
-| `db_event_subscription_arn` | The Amazon Resource Name of the RDS event notification subscription
-| `db_event_subscription_customer_aws_id` | The AWS customer account associated with the RDS event notification subscription
-| `db_snapshot_id` | Get DB snapshot ID
-| `db_security_group_id` | The db security group ID.
-| `db_security_group_arn` | The arn of the DB security group.
-| `db_instance_role_association_id` | ""
-| `db_option_group_id` | The db option group name.
-| `db_option_group_arn` | The ARN of the db option group.
+| `rds_cluster_reader_endpoint` | A read-only endpoint for the Aurora cluster, automatically load-balanced across replicas |
+| `rds_cluster_endpoint` | The DNS address of the RDS instance |
+| `rds_cluster_arn` | Amazon Resource Name (ARN) of cluster |
+| `rds_cluster_id` | The RDS Cluster Identifier |
+| `rds_global_cluster_arn` | RDS Global Cluster Amazon Resource Name (ARN) |
+| `rds_global_cluster_global_cluster_resource_id` | AWS Region-unique, immutable identifier for the global database cluster. This identifier is  |found in AWS CloudTrail log entries whenever the AWS KMS key for the DB cluster is accessed
+| `rds_global_cluster_id` | RDS Global Cluster identifier |
+| `rds_cluster_endpoint_arn` | Amazon Resource Name (ARN) of cluster |
+| `rds_cluster_endpoint_id` | The RDS Cluster Endpoint Identifier |
+| `rds_cluster_endpoint_endpoint` | A custom endpoint for the Aurora cluster |
+| `rds_cluster_parameter_group_arn` | The ARN of the db cluster parameter group. |
+| `rds_cluster_parameter_group_id` | The db cluster parameter group name. |
+| `db_instance_id` | "" |
+| `db_instance_arn` | "" |
+| `db_instance_addresses` | "" |
+| `db_instance_hosted_zone_id` | Get DB instance hosted zone ID |
+| `db_instance_endpoint` | Get DB instance hosted zone ID |
+| `aws_db_subnet_group_id` | Get DB subnet group ID |
+| `db_parameter_group_id` | Get DB parameter group ID |
+| `db_cluster_snapshot_id` | Get DB cluster snapshot ID |
+| `db_event_subscription_id` | The name of the RDS event notification subscription |
+| `db_event_subscription_arn` | The Amazon Resource Name of the RDS event notification subscription |
+| `db_event_subscription_customer_aws_id` | The AWS customer account associated with the RDS event notification subscription |
+| `db_snapshot_id` | Get DB snapshot ID |
+| `db_security_group_id` | The db security group ID. |
+| `db_security_group_arn` | The arn of the DB security group. |
+| `db_instance_role_association_id` | "" |
+| `db_option_group_id` | The db option group name. |
+| `db_option_group_arn` | The ARN of the db option group. |
 
 You can use these outputs to reference the created resources in other parts of your Terraform configuration.
 

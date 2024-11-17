@@ -124,7 +124,7 @@ Remember to replace the placeholder values (AMI ID, security group ID, subnet ID
 
 ### Variables
 
-| Variable                            | Description                                                                                   | **Default                     |
+| Variable                            | Description                                                                                   | Default                     |
 |-------------------------------------|-----------------------------------------------------------------------------------------------|-----------------------------|
 | `region`    | The region where to deploy this code (e.g. us-east-1). | (`default = us-east-1`) |
 | `ami`     | Default AMIs by region | (`default = {'us-east-1': 'ami-46c1b650', 'us-west-2': 'ami-50d1d929', 'eu-west-1': 'ami-6e28b517'}`) |
