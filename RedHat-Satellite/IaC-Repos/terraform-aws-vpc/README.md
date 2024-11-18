@@ -1,4 +1,4 @@
-<a href="https://cpco.io/homepage"><img src="banner.png" alt="Project Banner"/></a><br/>
+<a href=""><img src="banner.png" alt="Project Banner"/></a><br/>
 # VPC (Virtual Private Cloud) Modules
 
 his module can be used to deploy a pragmatic VPC with various subnets types in # AZs. Common deployment examples can be found in [examples/]

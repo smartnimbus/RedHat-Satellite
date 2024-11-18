@@ -1,13 +1,14 @@
+<a href=""><img src="banner.png" alt="Project Banner"/></a><br/>
 # ELB (Elastic Load Balancing) Modules
 
 ## Features
 
 - [X] **lb:** Provides a Load Balancer resource.
-- [ ] **lb_listener:** Provides a Load Balancer Listener resource.
-- [ ] **lb_listener_certificate:** Provides a Load Balancer Listener Certificate resource.
-- [ ] **lb_listener_rule:** Provides a Load Balancer Listener Rule resource.
-- [ ] **lb_target_group:** Provides a Target Group resource for use with Load Balancers.
-- [ ] **lb_target_group_attachment:** Provides the ability to register instances and containers with a LB
+- [X] **lb_listener:** Provides a Load Balancer Listener resource.
+- [X] **lb_listener_certificate:** Provides a Load Balancer Listener Certificate resource.
+- [X] **lb_listener_rule:** Provides a Load Balancer Listener Rule resource.
+- [X] **lb_target_group:** Provides a Target Group resource for use with Load Balancers.
+- [X] **lb_target_group_attachment:** Provides the ability to register instances and containers with a LB
   target group
 - [ ] **lb_trust_store:** Provides a Trust Store resource for use with Load Balancers.
 - [ ] **lb_trust_store_revocation:** Provides a Trust Store Revocation resource for use with Load Balancers.
