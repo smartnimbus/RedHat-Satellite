@@ -1,3 +1,4 @@
+<a href=""><img src="banner.png" alt="Project Banner"/></a><br/>
 # Work with RDS via terraform
 
 This Terraform module provides a flexible and reusable way to create and manage various Amazon RDS resources, including:
@@ -5,18 +6,18 @@ This Terraform module provides a flexible and reusable way to create and manage 
 
 ## Features
 
-- **RDS Clusters:** Create Aurora clusters with instances, parameter groups, and subnet groups.
-- **RDS Instances:** Create standalone RDS instances for various database engines like MySQL, PostgreSQL, Oracle, and SQL Server.
-- **DB Subnet Groups:** Define subnet groups for your RDS instances and clusters.
-- **DB Parameter Groups:** Customize database parameters for your instances and clusters.
-- **DB Option Groups:** Add extensions and other options to your database instances.
-- **DB Security Groups:** Control network access to your RDS instances.
-- **DB Snapshots:** Create snapshots of your instances and clusters for backup and recovery.
-- **DB Event Subscriptions:** Receive notifications about events related to your RDS resources.
-- **DB Instance Role Associations:** Associate IAM roles with your instances to grant access to other AWS services.
-- **DB Proxy:** Create a DB proxy to manage connections to your database instances.
-- **DB Proxy Default Target Group:** Create a default target group for your DB proxy.
-- **DB Proxy Target:** Add targets (instances or clusters) to your DB proxy target group.
+- [X] **RDS Clusters:** Create Aurora clusters with instances, parameter groups, and subnet groups.
+- [X] **RDS Instances:** Create standalone RDS instances for various database engines like MySQL, PostgreSQL, Oracle, and SQL Server.
+- [X] **DB Subnet Groups:** Define subnet groups for your RDS instances and clusters.
+- [X] **DB Parameter Groups:** Customize database parameters for your instances and clusters.
+- [X] **DB Option Groups:** Add extensions and other options to your database instances.
+- [X] **DB Security Groups:** Control network access to your RDS instances.
+- [X] **DB Snapshots:** Create snapshots of your instances and clusters for backup and recovery.
+- [X] **DB Event Subscriptions:** Receive notifications about events related to your RDS resources.
+- [X] **DB Instance Role Associations:** Associate IAM roles with your instances to grant access to other AWS services.
+- [X] **DB Proxy:** Create a DB proxy to manage connections to your database instances.
+- [X] **DB Proxy Default Target Group:** Create a default target group for your DB proxy.
+- [X] **DB Proxy Target:** Add targets (instances or clusters) to your DB proxy target group.
 
 ## Usage
 To use this module, you can call it from your Terraform configuration and provide the necessary variables. Here's a basic example:

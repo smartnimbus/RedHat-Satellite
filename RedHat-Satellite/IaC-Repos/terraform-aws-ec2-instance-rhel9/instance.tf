@@ -1,81 +1,13 @@
-#---------------------------------------------------
-# Data lookup for existing SSM role by name (if already created in AWS account)
-# Checks if an IAM role with the specified name exists.
-# If it does, the data source will retrieve its properties for later use.
-#---------------------------------------------------
-data "aws_iam_role" "ssm_ec2_role" {
-  # Conditionally create the data source if an IAM role with the specified name exists
-  count = length(try([data.aws_iam_role.ssm_ec2_role.instance_name], [])) > 0 ? 1 : 0
-  # The name of the IAM role to look for
-  name = "${var.instance_name}-ssm-role"
-}
+#------------------------------------------------------------------------------------------------------
+# Resource         : aws_instance
+# description      : Provides an EC2 instance resource. This allows instances to be created, updated, and deleted. Instances also support provisioning.
+# module           : EC2 (Elastic Compute Cloud)
+# provider         : terraform-provider-aws
+# reference        : https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
+# Provider Version : 5.76.0 (v5.76.0), Published at: 2024-11-14T17:36:21Z
+#------------------------------------------------------------------------------------------------------
 
 #---------------------------------------------------
-# AWS IAM Role Resource
-# SSM IAM role for EC2 instance - created only if it does not already exist
-# Allows the EC2 instance to communicate with SSM (Systems Manager)
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile
-#---------------------------------------------------
-resource "aws_iam_role" "ssm_ec2_role" {
-  # Conditionally create the resource if the data source did not find an existing role
-  count = length(data.aws_iam_role.ssm_ec2_role) == 0 ? 1 : 0
-  # The name of the IAM role
-  name = "${var.instance_name}-ssm-role"
-
-  # The policy that grants an entity permission to assume the role.
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect = "Allow"
-      Principal = {
-        Service = "ec2.amazonaws.com"
-      }
-      Action = "sts:AssumeRole"
-    }]
-  })
-}
-
-#---------------------------------------------------
-# AWS IAM Role Policy Attachment
-# Attaches the SSM Managed Policy to the IAM role to enable SSM actions
-# Only attaches policy if the IAM role was created in this configuration
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile
-#---------------------------------------------------
-resource "aws_iam_role_policy_attachment" "ssm_policy_attach" {
-  # Conditionally create the resource if the IAM role was created in this configuration
-  count = length(data.aws_iam_role.ssm_ec2_role) == 0 ? 1 : 0
-  # The name of the IAM role to attach the policy to
-  role = aws_iam_role.ssm_ec2_role.instance_name
-  # The ARN of the policy to attach
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-}
-
-#---------------------------------------------------
-# AWS IAM Instance Profile
-# Creates an instance profile for the IAM role, allowing EC2 instances to assume it
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile
-#---------------------------------------------------
-resource "aws_iam_instance_profile" "ssm_role_profile" {
-  # The name of the instance profile
-  name = "${var.instance_name}-ssm-profile"
-  # The name of the IAM role to associate with the instance profile
-  role = coalesce(
-    aws_iam_role.ssm_ec2_role[count.index].instance_name,
-    data.aws_iam_role.ssm_ec2_role.instance_name
-  )
-}
-
-# Load the default user data script
-data "template_file" "default_userdata" {
-  # The path to the default user data script
-  template = file("${path.module}/default_userdata.sh")
-}
-
-
-#---------------------------------------------------
-# AWS EC2 Instance Resource
-# Configures and launches an EC2 instance with optional SSM IAM role attachment
-# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance#cpu-options
 # https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AmazonSSMManagedInstanceCore.html
 # https://aws.amazon.com/blogs/mt/applying-managed-instance-policy-best-practices/
 # https://docs.aws.amazon.com/service-authorization/latest/reference/list_awssystemsmanager.html#awssystemsmanager-actions-as-permissions
@@ -231,13 +163,13 @@ resource "aws_instance" "instance" {
     content {
       delete_on_termination = lookup(ebs_block_device.value, "delete_on_termination", null)
       device_name           = lookup(ebs_block_device.value, "device_name", null)
-      encrypted             = true  # Enforce encryption
+      encrypted             = true # Enforce encryption
       # encrypted             = lookup(ebs_block_device.value, "encrypted", null)
-      iops                  = lookup(ebs_block_device.value, "iops", null)
-      snapshot_id           = lookup(ebs_block_device.value, "snapshot_id", null)
-      volume_size           = lookup(ebs_block_device.value, "volume_size", null)
-      volume_type           = lookup(ebs_block_device.value, "volume_type", null)
-      kms_key_id            = lookup(ebs_block_device.value, "kms_key_id", null)
+      iops        = lookup(ebs_block_device.value, "iops", null)
+      snapshot_id = lookup(ebs_block_device.value, "snapshot_id", null)
+      volume_size = lookup(ebs_block_device.value, "volume_size", null)
+      volume_type = lookup(ebs_block_device.value, "volume_type", null)
+      kms_key_id  = lookup(ebs_block_device.value, "kms_key_id", null)
 
       throughput = lookup(ebs_block_device.value, "throughput", null)
       tags       = lookup(ebs_block_device.value, "tags", null)
@@ -269,7 +201,7 @@ resource "aws_instance" "instance" {
       volume_size           = lookup(root_block_device.value, "volume_size", null)
       volume_type           = lookup(root_block_device.value, "volume_type", null)
       # encrypted             = lookup(root_block_device.value, "encrypted", null)
-      encrypted             = true  # Enforce encryption
+      encrypted = true # Enforce encryption
 
       kms_key_id = lookup(root_block_device.value, "kms_key_id", null)
       throughput = lookup(root_block_device.value, "throughput", null)

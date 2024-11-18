@@ -90,16 +90,6 @@ variable "instance_cpu_options" {
   default     = {}
 }
 
-# variable "instance_cpu_core_count" {
-#   description = "(Optional) Sets the number of CPU cores for an instance. This option is only supported on creation of instance type that support CPU Options CPU Cores and Threads Per CPU Core Per Instance Type - specifying this option for unsupported instance types will return an error from the EC2 API."
-#   default     = null
-# }
-
-# variable "instance_cpu_threads_per_core" {
-#   description = "(Optional - has no effect unless cpu_core_count is also set) If set to to 1, hyperthreading is disabled on the launched instance. Defaults to 2 if not set. See Optimizing CPU Options for more information."
-#   default     = 2
-# }
-
 variable "instance_ebs_optimized" {
   description = "(Optional) If true, the launched EC2 instance will be EBS-optimized. Note that if this is not set on an instance type that is optimized by default then this will show as disabled but if the instance type is optimized by default then there is no need to set this and there is no effect to disabling it. See the EBS Optimized section of the AWS User Guide for more information. If true, the launched EC2 instance will be EBS-optimized"
   default     = null

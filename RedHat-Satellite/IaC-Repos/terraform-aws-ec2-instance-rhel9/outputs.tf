@@ -1,4 +1,3 @@
-# Output the IDs of the EC2 instances created
 output "instance_ids" {
   description = ""
   value       = element(concat(aws_instance.instance.*.id, [""], ), 0)
@@ -23,11 +22,6 @@ output "public_ip" {
   description = "List of public IP addresses assigned to the instances, if applicable"
   value       = element(concat(aws_instance.instance.*.public_ip, [""], ), 0)
 }
-
-// output "network_interface_id" {
-//   description = "List of IDs of the network interface of instances"
-//   value       = element(concat(aws_instance.instance.*.network_interface_id, [""], ), 0)
-// }
 
 output "primary_network_interface_id" {
   description = "List of IDs of the primary network interface of instances"
