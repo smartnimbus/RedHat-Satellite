@@ -4,13 +4,39 @@
 This Terraform module manages the creation of an EC2 instance with flexible configurations, including an optional SSM IAM role and custom user data capabilities. The module allows for dynamic management of default and custom user data scripts, and attaches an IAM role for Systems Manager (SSM) access if needed.
 
 ## Features
+- [ ] **ami:** Creates and manages a custom Amazon Machine Image (AMI).
+- [ ] **ami_copy:** Duplicates an existing Amazon Machine Image (AMI)
+- [ ] **ami_from_instance:** Creates an Amazon Machine Image (AMI) from an EBS-backed EC2 instance
+- [ ] **ami_launch_permission:** Adds a launch permission to an Amazon Machine Image (AMI).
+- [ ] **ec2_availability_zone_group:** Manages an EC2 Availability Zone Group.
+- [ ] **ec2_capacity_block_reservation:** Provides an EC2 Capacity Block Reservation. This allows you to purchase capacity block for your Amazon EC2 instances in a specific Availability Zone for machine learning (ML) Workloads.
+- [ ] **ec2_capacity_reservation:** Provides an EC2 Capacity Reservation. This allows you to reserve capacity for your Amazon EC2 instances in a specific Availability Zone for any duration.
+- [ ] **ec2_fleet:** Provides a resource to manage EC2 Fleets
+- [ ] **ec2_host:** Provides an EC2 Host resource. This allows Dedicated Hosts to be allocated, modified, and released.
+- [ ] **ec2_instance_connect_endpoint:** Provides an EC2 Instance Connect Endpoint resource.
+- [ ] **ec2_instance_metadata_defaults:** Manages regional EC2 instance metadata default settings.
+- [ ] **ec2_instance_state:** Provides an EC2 instance state resource. This allows managing an instance power state.
+- [ ] **ec2_serial_console_access:** Manages whether serial console access is enabled for your AWS account in the current AWS region.
+- [ ] **ec2_tag:** Manages an individual EC2 resource tag
+- [ ] **eip:** Provides an Elastic IP resource.
+- [ ] **eip_association:** Provides an AWS EIP Association
+- [ ] **eip_domain_name:** Assigns a static reverse DNS record to an Elastic IP addresses
+- [X] **instance:** Provides an EC2 instance resource. This allows instances to be created, updated, and deleted. Instances also support provisioning.
+- [ ] **key_pair:** Provides a Key Pair resource. Currently this supports importing an existing key pair but not creating a new key pair.
+- [ ] **launch_template:** Provides an EC2 launch template resource. Can be used to create instances or auto scaling groups.
+- [ ] **placement_group:** Provides an EC2 placement group.
+- [ ] **spot_datafeed_subscription:** Provides a Spot Datafeed Subscription resource.
+- [ ] **spot_fleet_request:** Provides a Spot Fleet Request resource.
+- [ ] **spot_instance_request:** Provides a Spot Instance Request resource.
+
+
 
 - [X] **EC2 Instance Creation**: Launches an EC2 instance with custom instance settings.
 - [X] **SSM IAM Role**: The module automatically creates an IAM role and instance profile for SSM access if one does not already exist. This allows you to manage the instance using Systems Manager.
 - [X] **Default User Data Script**: The module includes a default user data script that performs basic instance initialization tasks. You can also provide your own custom user data scripts.
 - [X] **User Data Customization**: Merges a default startup script with user-provided user data.
 - [X] **Custom Tagging and Configurations**: Supports custom tags, AMI lookup by region, and other instance properties.
-
+   
 ## Usage
 
 ### Example `main.tf`
